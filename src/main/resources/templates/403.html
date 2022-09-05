@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<h2>Sorry, you do not have permission to view this page.</h2>
+
+<form name="logoutForm" th:action="@{/logout}" method="post">
+    <input type="submit" value="logout"/>
+</form>
+</body>
+</html>
