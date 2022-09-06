@@ -32,50 +32,50 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void saveUser(User user) {
+    public void editUser(User user) {
         if (!Objects.equals(getUser(user.getId()).getPassword(), user.getPassword())) {
             user.setPassword(bPasswordEncoder.encode(user.getPassword()));
         }
-        userDao.save(user);
+        userDao.editUser(user);
     }
 
     @Transactional
     @Override
     public void addNewUser(User user) {
         user.setPassword(bPasswordEncoder.encode(user.getPassword()));
-        userDao.save(user);
+        userDao.addNewUser(user);
     }
 
     @Override
     public User getUser(Long id) {
-        return userDao.getUserById(id);
+        return userDao.getUser(id);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.findAll();
+        return userDao.getAllUsers();
     }
 
     @Transactional
     @Override
     public void deleteUser(Long id) {
-        userDao.deleteById(id);
+        userDao.deleteUser(id);
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userDao.findByName(username);
+    public User returnUserByName(String username) {
+        return userDao.returnUserByName(username);
     }
 
     @Override
     public Long returnId(String name) {
-        return userDao.findByName(name).getId();
+        return userDao.returnUserByName(name).getId();
     }
 
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = returnUserByName(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }

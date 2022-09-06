@@ -22,12 +22,15 @@
         <input type="text" th:field="*{password}" id="password"/>
         <br>
         <br>
-        <label class="col-4 col-form-label">Roles</label>
-        <div class="col-8">
-            <th:block th:each="role: ${roles}">
-                <input type="checkbox" th:field="*{roles}"
-                       th:text="${role.name}" th:value="${role.id}" class="m-2" />
-            </th:block>
+        <div class="form-group">
+            <label for="role2">Role</label>
+            <select multiple class="form-control" id="role2"  name="roles">
+                <option
+                        th:each="role:${roles}"
+                        th:text="${role.name}"
+                        th:value="${role.id}"
+                        th:selected="selected"/>
+            </select>
         </div>
         <br>
         <input type="submit" value="Save User"/>

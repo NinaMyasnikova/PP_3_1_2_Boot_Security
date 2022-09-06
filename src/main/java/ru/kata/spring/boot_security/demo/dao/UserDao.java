@@ -1,11 +1,15 @@
 package ru.kata.spring.boot_security.demo.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
 
-@Repository
-public interface UserDao extends JpaRepository<User, Long> {
-    User findByName(String username);
-    User getUserById(Long Id);
+import java.util.List;
+
+public interface UserDao{
+
+    void addNewUser(User user);
+    User getUser(Long id);
+    List<User> getAllUsers();
+    void deleteUser(Long id);
+    void editUser(User user);
+    User returnUserByName(String username);
 }

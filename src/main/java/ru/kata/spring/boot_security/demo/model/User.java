@@ -4,9 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -27,15 +25,11 @@ public class User implements UserDetails {
     @Column(name = "mail")
     private String mail;
 
-    @ManyToMany
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-
-
-    @Transient
-    private String passwordConfirm;
+            joinColumns = @JoinColumn(name = "user_id", updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "role_id", unique = false))
+    private List<Role> roles = new ArrayList<>();
 
     public User() {}
 
@@ -70,11 +64,6 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
     public String getPassword() {
         return password;
     }
@@ -82,6 +71,40 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return null;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id: " + id +
+                ", name: " + name +
+                ", lastname: " + lastName +
+                ", mail: " + mail + "}";
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     @Override
@@ -102,49 +125,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id: " + id +
-                ", name: " + name +
-                ", lastname: " + lastName +
-                ", mail: " + mail + "}";
-    }
-
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public void addRole(Role role) {
-        this.roles.add(role);
     }
 }
